@@ -9,6 +9,14 @@
     "build-min": "browserify index.js --standalone GeojsonEquality | uglifyjs -c -m > dist/geojson-equality.min.js",
     "build": "npm run build-debug && npm run build-min"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/geosquare/geojson-equality.git"
+  },
+  "bugs": {
+    "url": "https://github.com/geosquare/geojson-equality/issues"
+  },
+  "homepage": "https://github.com/geosquare/geojson-equality",
   "keywords": [
     "geojson",
     "equality",
