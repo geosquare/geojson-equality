@@ -27,7 +27,7 @@ var g3 = { "type": "Polygon", "coordinates": [
 
 eq.compare(g1,g3);    // returns false
 ```
-For including in browser, download file [geojson-equality.min.js](//raw.githubusercontent.com/geosquare/geojson-equality/master/dist/geojson2svg.min.js)
+For including in browser, download file [geojson-equality.min.js](//raw.githubusercontent.com/geosquare/geojson-equality/master/dist/geojson-equality.min.js)
 ```html
 <script type="text/javascipt" src="path/to/geojson-equality.min.js"></script>
 ```
