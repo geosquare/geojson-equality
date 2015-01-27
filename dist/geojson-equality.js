@@ -3,7 +3,6 @@
 var Equality = function(opt) {
   this.precision = opt && opt.precision ? opt.precision : 17; 
   this.direction = opt && opt.direction ? opt.direction : false;
-  //this.orientation = opt && opt.orientation ? opt.orientation : false;
   this.pseudoNode = opt && opt.pseudoNode ? opt.pseudoNode : false;
 };
 
@@ -102,8 +101,8 @@ Equality.prototype.comparePath = function (p1,p2) {
 
 Equality.prototype.comparePolygon = function(g1,g2) {
   if (this.compareLine(g1.coordinates[0],g2.coordinates[0],1,true)) {
-    holes1 = g1.coordinates.slice(1,g1.coordinates.length);
-    holes2 = g2.coordinates.slice(1,g2.coordinates.length);
+    var holes1 = g1.coordinates.slice(1,g1.coordinates.length);
+    var holes2 = g2.coordinates.slice(1,g2.coordinates.length);
     var cont = this;
     return holes1.every(function(h1) {
       return this.some(function(h2) {
