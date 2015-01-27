@@ -56,10 +56,10 @@ eq.compare(g1,g2);  // returns true
 
 ## developing
 Once you run
- 
-```npm isntall```
 
-then for running test 
+```npm install```
+
+then for running test
 
 ```npm run test```
 
