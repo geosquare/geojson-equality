@@ -1,9 +1,11 @@
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.GeojsonEquality=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 //index.js
+
 var Equality = function(opt) {
   this.precision = opt && opt.precision ? opt.precision : 17; 
   this.direction = opt && opt.direction ? opt.direction : false;
   this.pseudoNode = opt && opt.pseudoNode ? opt.pseudoNode : false;
+  this.objectComparator = opt && opt.objectComparator ? opt.objectComparator : objectComparator;
 };
 
 Equality.prototype.compare = function(g1,g2) {
@@ -19,6 +21,8 @@ Equality.prototype.compare = function(g1,g2) {
   case 'Polygon':
     return this.comparePolygon(g1,g2);
     break;
+  case 'Feature':
+    return this.compareFeature(g1, g2);
   default:
     if (g1.type.indexOf('Multi') === 0) {
       var context = this;
@@ -52,7 +56,7 @@ function sameLength(g1,g2) {
 Equality.prototype.compareCoord = function(c1,c2) {
   return c1[0].toFixed(this.precision) === c2[0].toFixed(this.precision)
     && c1[1].toFixed(this.precision) === c2[1].toFixed(this.precision);
-}
+};
 
 Equality.prototype.compareLine = function(path1,path2,ind,isPoly) {
   if (!sameLength(path1,path2)) return false;
@@ -113,10 +117,42 @@ Equality.prototype.comparePolygon = function(g1,g2) {
     return false;
   }
 };
+
+Equality.prototype.compareFeature = function(g1,g2) {
+  if (
+    g1.id !== g2.id ||
+    !this.objectComparator(g1.properties, g2.properties)
+  ) {
+    return false;
+  }
+
+  return this.compare(g1.geometry, g2.geometry);
+};
+
 Equality.prototype.removePseudo = function(path) {
   //TODO to be implement 
   return path;
 };
+
+function objectComparator(obj1, obj2) {
+  var i;
+  var objKeys = Object.keys(obj1);
+  
+  if (objKeys.length !== Object.keys(obj2).length) {
+    return false;
+  }
+  
+  for (i = 0; i < objKeys.length; i++) {
+    if (!(objKeys[i] in obj2)) {
+      return false;
+    }
+    if (obj1[objKeys[i]] !== obj2[objKeys[i]]) {
+      return false
+    }
+  }
+  
+  return true;
+}
 
 module.exports = Equality;
 

@@ -54,6 +54,13 @@ eq.compare(g1,g2);  // returns true
   eq.compare(g1,g2);  // returns false
 ```
 
+* **objectComparator** function, custom function for use in comparing Feature properties. Default is a shallow comparison.
+```javascript
+  // using lodash isEqual to deep comparison
+  var isEqual = require('lodash/lang/isEqual')
+  var eq = new GeojsonEqaulity({objectComparator: isEqual});
+```
+
 ## developing
 Once you run
 
