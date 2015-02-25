@@ -1,7 +1,8 @@
 //index.js
+var deepEqual = require('deep-equal');
 
 var Equality = function(opt) {
-  this.precision = opt && opt.precision ? opt.precision : 17; 
+  this.precision = opt && opt.precision ? opt.precision : 17;
   this.direction = opt && opt.direction ? opt.direction : false;
   this.pseudoNode = opt && opt.pseudoNode ? opt.pseudoNode : false;
   this.objectComparator = opt && opt.objectComparator ? opt.objectComparator : objectComparator;
@@ -11,7 +12,7 @@ Equality.prototype.compare = function(g1,g2) {
   if (g1.type !== g2.type || !sameLength(g1,g2)) return false;
 
   switch(g1.type) {
-  case 'Point': 
+  case 'Point':
     return this.compareCoord(g1.coordinates, g2.coordinates);
     break;
   case 'LineString':
@@ -39,14 +40,14 @@ Equality.prototype.compare = function(g1,g2) {
 
 function explode(g) {
   return g.coordinates.map(function(part) {
-    return { 
+    return {
       type: g.type.replace('Multi', ''),
-      coordinates: part} 
+      coordinates: part}
   });
 }
 //compare length of coordinates/array
 function sameLength(g1,g2) {
-   return g1.hasOwnProperty('coordinates') ? 
+   return g1.hasOwnProperty('coordinates') ?
     g1.coordinates.length === g2.coordinates.length
     : g1.length === g2.length;
 }
@@ -61,23 +62,23 @@ Equality.prototype.compareLine = function(path1,path2,ind,isPoly) {
   if (!sameLength(path1,path2)) return false;
   var p1 = this.pseudoNode ? path1 : this.removePseudo(path1);
   var p2 = this.pseudoNode ? path2 : this.removePseudo(path2);
-  if (isPoly && !this.compareCoord(p1[0],p2[0])) { 
+  if (isPoly && !this.compareCoord(p1[0],p2[0])) {
     // fix start index of both to same point
     p2 = this.fixStartIndex(p2,p1);
     if(!p2) return;
   }
   // for linestring ind =0 and for polygon ind =1
   var sameDirection = this.compareCoord(p1[ind],p2[ind]);
-  if (this.direction || sameDirection 
+  if (this.direction || sameDirection
   ) {
     return this.comparePath(p1, p2);
   } else {
     if (this.compareCoord(p1[ind],p2[p2.length - (1+ind)])
     ) {
-      return this.comparePath(p1.slice().reverse(), p2); 
+      return this.comparePath(p1.slice().reverse(), p2);
     }
     return false;
-  } 
+  }
 };
 Equality.prototype.fixStartIndex = function(sourcePath,targetPath) {
   //make sourcePath first point same as of targetPath
@@ -129,28 +130,12 @@ Equality.prototype.compareFeature = function(g1,g2) {
 };
 
 Equality.prototype.removePseudo = function(path) {
-  //TODO to be implement 
+  //TODO to be implement
   return path;
 };
 
 function objectComparator(obj1, obj2) {
-  var i;
-  var objKeys = Object.keys(obj1);
-  
-  if (objKeys.length !== Object.keys(obj2).length) {
-    return false;
-  }
-  
-  for (i = 0; i < objKeys.length; i++) {
-    if (!(objKeys[i] in obj2)) {
-      return false;
-    }
-    if (obj1[objKeys[i]] !== obj2[objKeys[i]]) {
-      return false
-    }
-  }
-  
-  return true;
+  return deepEqual(obj1, obj2, {strict: true});
 }
 
 module.exports = Equality;

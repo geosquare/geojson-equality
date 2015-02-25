@@ -29,6 +29,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "deep-equal": "^1.0.0"
   },
   "devDependencies": {
     "browserify": "~5.10.1",
