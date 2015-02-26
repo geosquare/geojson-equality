@@ -59,7 +59,7 @@ Equality.prototype.compareCoord = function(c1,c2) {
   }
 
   for (var i=0; i < c1.length; i++) {
-    if (c1[i].toFixed(this.precision) != c2[i].toFixed(this.precision)) {
+    if (c1[i].toFixed(this.precision) !== c2[i].toFixed(this.precision)) {
       return false;
     }
   }
