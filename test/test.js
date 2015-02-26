@@ -4,12 +4,20 @@ describe('geojson-equality for Points', function() {
   var g1 = { "type": "Point", "coordinates": [30, 10] },
     g2 = { "type": "Point", "coordinates": [30, 10] },
     g3 = { "type": "Point", "coordinates": [30, 11] },
+    g4 = { "type": "Point", "coordinates": [30, 10, 5]},
+    g5 = { "type": "Point", "coordinates": [30, 10, 5]},
     eq = new Equality();
   it('are equal', function() {
     expect(eq.compare(g1,g2)).to.be.true;
   });
   it('are not equal', function() {
     expect(eq.compare(g1,g3)).to.be.false;
+  });
+  it('are not equal with different point dimensions', function() {
+    expect(eq.compare(g1,g4)).to.be.false;
+  });
+  it('are equal with 3d points', function() {
+    expect(eq.compare(g4,g5)).to.be.true;
   });
 });
 describe('geojson-equality for LineStrings', function() {
