@@ -55,8 +55,16 @@ function sameLength(g1,g2) {
 
 // compare the two coordinates [x,y]
 Equality.prototype.compareCoord = function(c1,c2) {
-  return c1[0].toFixed(this.precision) === c2[0].toFixed(this.precision)
-    && c1[1].toFixed(this.precision) === c2[1].toFixed(this.precision);
+  if (c1.length !== c2.length) {
+    return false;
+  }
+
+  for (var i=0; i < c1.length; i++) {
+    if (c1[i].toFixed(this.precision) !== c2[i].toFixed(this.precision)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 Equality.prototype.compareLine = function(path1,path2,ind,isPoly) {
