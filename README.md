@@ -36,7 +36,7 @@ GeojsonEquality class can be initiated with many options that are used to match 
 * **precision** number as floating points precision required. Defualt is **17**
 ```javascript
 var g1 = { "type": "Point", "coordinates": [30.2, 10] };
-var g1 = { "type": "Point", "coordinates": [30.22233, 10] };
+var g2 = { "type": "Point", "coordinates": [30.22233, 10] };
 var eq = new GeojsonEqaulity({precision: 3});
 eq.compare(g1,g2);  // returns false
 var eq = new GeojsonEqaulity({precision: 1});
