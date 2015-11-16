@@ -113,7 +113,6 @@ describe('geojson-equality for Polygons', function() {
     [[30, 10], [40.123389, 40.123378], [20, 40], [10, 20], [30, 10]]
   ]};
   it('after limiting precision, are equal', function() {
-    debugger;
     var eq = new Equality({precision: 3});
     expect(eq.compare(gprecision1,gprecision2)).to.be.true;
   });
@@ -125,32 +124,32 @@ describe('geojson-equality for Polygons', function() {
 });
 
 describe ('geojson-equality for Feature', function() {
-  it ('will be not be equal with changed id', function() {
-    var gprecision1 = {"type": "Feature", "id": "id1"};
-    var gprecision2 = {"type": "Feature", "id": "id2"};
+  it ('will not be equal with changed id', function() {
+    var f1 = {"type": "Feature", "id": "id1"};
+    var f2 = {"type": "Feature", "id": "id2"};
     var eq = new Equality();
-    expect(eq.compare(gprecision1, gprecision2)).to.be.false;
+    expect(eq.compare(f1, f2)).to.be.false;
   });
-  it ('will be not be equal with different count of properties', function() {
-    var gprecision1 = {"type": "Feature", "id": "id1", "properties": {"foo": "bar"}};
-    var gprecision2 = {"type": "Feature", "id": "id1", "properties": {"foo1": "bar", "foo2": "bar"}};
+  it ('will not be equal with different count of properties', function() {
+    var f1 = {"type": "Feature", "id": "id1", "properties": {"foo": "bar"}};
+    var f2 = {"type": "Feature", "id": "id1", "properties": {"foo1": "bar", "foo2": "bar"}};
     var eq = new Equality();
-    expect(eq.compare(gprecision1, gprecision2)).to.be.false;
+    expect(eq.compare(f1, f2)).to.be.false;
   });
-  it ('will be not be equal with different keys in properties', function() {
-    var gprecision1 = {"type": "Feature", "id": "id1", "properties": {"foo1": "bar"}};
-    var gprecision2 = {"type": "Feature", "id": "id1", "properties": {"foo2": "bar"}};
+  it ('will not be equal with different keys in properties', function() {
+    var f1 = {"type": "Feature", "id": "id1", "properties": {"foo1": "bar"}};
+    var f2 = {"type": "Feature", "id": "id1", "properties": {"foo2": "bar"}};
     var eq = new Equality();
-    expect(eq.compare(gprecision1, gprecision2)).to.be.false;
+    expect(eq.compare(f1, f2)).to.be.false;
   });
-  it ('will be not be equal with different properties', function() {
-    var gprecision1 = {"type": "Feature", "id": "id1", "properties": {"foo": "bar1"}};
-    var gprecision2 = {"type": "Feature", "id": "id1", "properties": {"foo": "bar2"}};
+  it ('will not be equal with different properties', function() {
+    var f1 = {"type": "Feature", "id": "id1", "properties": {"foo": "bar1"}};
+    var f2 = {"type": "Feature", "id": "id1", "properties": {"foo": "bar2"}};
     var eq = new Equality();
-    expect(eq.compare(gprecision1, gprecision2)).to.be.false;
+    expect(eq.compare(f1, f2)).to.be.false;
   });
-  it ('will be not be equal with different geometry', function() {
-    var gprecision1 = {
+  it ('will not be equal with different geometry', function() {
+    var f1 = {
       "type": "Feature",
       "id": "id1",
       "properties": {"foo": "bar1"},
@@ -158,7 +157,7 @@ describe ('geojson-equality for Feature', function() {
         [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
       ]}
     };
-    var gprecision2 = {
+    var f2 = {
       "type": "Feature",
       "id": "id1",
       "properties": {"foo": "bar1"},
@@ -167,30 +166,30 @@ describe ('geojson-equality for Feature', function() {
       ]}
     };
     var eq = new Equality();
-    expect(eq.compare(gprecision1, gprecision2)).to.be.false;
+    expect(eq.compare(f1, f2)).to.be.false;
   });
   it ('will be equal with nested properties', function() {
-    var gprecision1 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz"}},
+    var f1 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz"}},
       "geometry": {"type": "Point", "coordinates": [0, 1]}
     };
-    var gprecision2 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz"}},
+    var f2 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz"}},
       "geometry": {"type": "Point", "coordinates": [0, 1]}
     };
     var eq = new Equality();
-    expect(eq.compare(gprecision1, gprecision2)).to.be.true;
+    expect(eq.compare(f1, f2)).to.be.true;
   });
-  it ('will be not equal with different nested properties', function() {
-    var gprecision1 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz"}},
+  it ('will not be equal with different nested properties', function() {
+    var f1 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz"}},
       "geometry": {"type": "Point", "coordinates": [0, 1]}
     };
-    var gprecision2 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz2"}},
+    var f2 = {"type": "Feature", "id": "id1", "properties": {"foo": {"bar": "baz2"}},
       "geometry": {"type": "Point", "coordinates": [0, 1]}
     };
     var eq = new Equality();
-    expect(eq.compare(gprecision1, gprecision2)).to.be.false;
+    expect(eq.compare(f1, f2)).to.be.false;
   });
   it ('will use a custom comparator if provided', function() {
-    var gprecision1 = {
+    var f1 = {
       "type": "Feature",
       "id": "id1",
       "properties": {"foo_123": "bar"},
@@ -198,7 +197,7 @@ describe ('geojson-equality for Feature', function() {
         [[40, 20], [31, 10], [30, 20], [30, 10], [10, 40]]
       ]}
     };
-    var gprecision2 = {
+    var f2 = {
       "type": "Feature",
       "id": "id1",
       "properties": {"foo_456": "bar"},
@@ -209,7 +208,63 @@ describe ('geojson-equality for Feature', function() {
     var eq = new Equality({objectComparator: function(obj1, obj2) {
       return ('foo_123' in obj1 && 'foo_456' in obj2);
     }});
-    expect(eq.compare(gprecision1, gprecision2)).to.be.true;
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('will not be equal if one has bbox and other not', function() {
+    var f1 = {"type": "Feature", "id": "id1", "bbox": [1, 2, 3, 4]},
+      f2 = {"type": "Feature", "id": "id1"},
+      eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will not be equal if bboxes are not equal', function() {
+    var f1 = {"type": "Feature", "id": "id1", "bbox": [1, 2, 3, 4]},
+      f2 = {"type": "Feature", "id": "id1", "bbox": [1, 2, 3, 5]},
+      eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('equal features with bboxes', function() {
+    var f1 = {
+      "type": "Feature",
+      "id": "id1",
+      "properties": {"foo": "bar1"},
+      "geometry": { "type": "Polygon", "coordinates": [
+        [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+      ]},
+      "bbox": [10, 10, 41, 40]
+    };
+    var f2 = {
+      "type": "Feature",
+      "id": "id1",
+      "properties": {"foo": "bar1"},
+      "geometry": { "type": "Polygon", "coordinates": [
+        [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+      ]},
+      "bbox": [10, 10, 41, 40]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('not equal features with equal bboxes', function() {
+    var f1 = {
+      "type": "Feature",
+      "id": "id1",
+      "properties": {"foo": "bar1"},
+      "geometry": { "type": "Polygon", "coordinates": [
+        [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+      ]},
+      "bbox": [10, 10, 41, 40]
+    };
+    var f2 = {
+      "type": "Feature",
+      "id": "id1",
+      "properties": {"foo": "bar1"},
+      "geometry": { "type": "Polygon", "coordinates": [
+        [[30, 10], [41, 40], [20, 40], [10, 20], [30, 1]]
+      ]},
+      "bbox": [10, 10, 41, 40]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
   });
 });
 
@@ -283,7 +338,6 @@ describe('geojson-equality for MultiPolygon', function() {
   ]};
   it('both are not equal', function() {
     var eq = new Equality();
-    debugger;
     expect(eq.compare(g1,g3)).to.be.false;
   });
   var gh1 = { "type": "MultiPolygon", "coordinates": [

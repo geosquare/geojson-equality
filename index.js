@@ -129,14 +129,26 @@ Equality.prototype.comparePolygon = function(g1,g2) {
 Equality.prototype.compareFeature = function(g1,g2) {
   if (
     g1.id !== g2.id ||
-    !this.objectComparator(g1.properties, g2.properties)
+    !this.objectComparator(g1.properties, g2.properties) ||
+    !this.compareBBox(g1,g2)
   ) {
     return false;
   }
-
   return this.compare(g1.geometry, g2.geometry);
 };
 
+Equality.prototype.compareBBox = function(g1,g2) {
+  if (
+    (!g1.bbox && !g2.bbox) || 
+    (
+      g1.bbox && g2.bbox &&
+      this.compareCoord(g1.bbox, g2.bbox)
+    )
+  )  {
+    return true;
+  }
+  return false;
+};
 Equality.prototype.removePseudo = function(path) {
   //TODO to be implement
   return path;
