@@ -1,6 +1,6 @@
 {
   "name": "geojson-equality",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Check two valid geojson geometries for equality.",
   "main": "index.js",
   "scripts": {
