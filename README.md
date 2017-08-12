@@ -22,7 +22,7 @@ var g2 = { "type": "Polygon", "coordinates": [
 
 eq.compare(g1,g2);    // returns true
 var g3 = { "type": "Polygon", "coordinates": [
-  [[30o, 100], [400, 400], [200, 400], [100, 200], [300, 100]]
+  [[300, 100], [400, 400], [200, 400], [100, 200], [300, 100]]
 ]};
 
 eq.compare(g1,g3);    // returns false
