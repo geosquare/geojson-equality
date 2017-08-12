@@ -37,9 +37,9 @@ GeojsonEquality class can be initiated with many options that are used to match 
 ```javascript
 var g1 = { "type": "Point", "coordinates": [30.2, 10] };
 var g2 = { "type": "Point", "coordinates": [30.22233, 10] };
-var eq = new GeojsonEqaulity({precision: 3});
+var eq = new GeojsonEquality({precision: 3});
 eq.compare(g1,g2);  // returns false
-var eq = new GeojsonEqaulity({precision: 1});
+var eq = new GeojsonEquality({precision: 1});
 eq.compare(g1,g2);  // returns true
 ```
 * **direction** true | false, direction of LineString or Polygon (orientation) is ignored if false. Default is **false**.
@@ -48,9 +48,9 @@ eq.compare(g1,g2);  // returns true
     [ [30, 10], [10, 30], [40, 40] ] };
   var g2 = { "type": "LineString", "coordinates": 
     [ [40, 40], [10, 30], [30, 10] ] };
-  var eq = new GeojsonEqaulity({direction: false});
+  var eq = new GeojsonEquality({direction: false});
   eq.compare(g1,g2);  // returns true
-  var eq = new GeojsonEqaulity({direction: true});
+  var eq = new GeojsonEquality({direction: true});
   eq.compare(g1,g2);  // returns false
 ```
 
@@ -58,7 +58,7 @@ eq.compare(g1,g2);  // returns true
 ```javascript
   // using lodash isEqual to deep comparison
   var isEqual = require('lodash/lang/isEqual')
-  var eq = new GeojsonEqaulity({objectComparator: isEqual});
+  var eq = new GeojsonEquality({objectComparator: isEqual});
 ```
 
 ## developing
