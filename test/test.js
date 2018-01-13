@@ -268,6 +268,198 @@ describe ('geojson-equality for Feature', function() {
   });
 });
 
+describe ('geojson-equality for FeatureCollection', function() {
+  it ('will not be equal with different number of features', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [0, 0] }
+      }]
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [0, 0] }
+      },{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [0, 0] }
+      }]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will not be equal with different features', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [0, 0] }
+      }]
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [1, 1] }
+      }]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will not be equal with different order of features', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [0, 0] }
+      },{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [1, 1] }
+      }]
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [1, 1] }
+      },{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [0, 0] }
+      }]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will be equal with equal features', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [1, 1] }
+      }]
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": { "type": "Point", "coordinates": [1, 1] }
+      }]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('will be equal with equal with no features', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": []
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": []
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('will use a custom comparator if provided', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "id": "id1",
+        "properties": {"foo_123": "bar"},
+        "geometry": { "type": "Polygon", "coordinates": [
+          [[40, 20], [31, 10], [30, 20], [30, 10], [10, 40]]
+        ]}
+      }]
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "id": "id1",
+        "properties": {"foo_456": "bar"},
+        "geometry": { "type": "Polygon", "coordinates": [
+          [[40, 20], [31, 10], [30, 20], [30, 10], [10, 40]]
+        ]}
+      }]
+    };
+    var eq = new Equality({objectComparator: function(obj1, obj2) {
+      return ('foo_123' in obj1 && 'foo_456' in obj2);
+    }});
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('will not be equal if one has bbox and other not', function() {
+    var f1 = {"type": "FeatureCollection", "features": [], "bbox": [1, 2, 3, 4]},
+      f2 = {"type": "FeatureCollection", "features": "[]"},
+      eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will not be equal if bboxes are not equal', function() {
+    var f1 = {"type": "FeatureCollection", "features": [], "bbox": [1, 2, 3, 4]},
+      f2 = {"type": "FeatureCollection", "features": [], "bbox": [1, 2, 3, 5]},
+      eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('equal feature collections with bboxes', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "id": "id1",
+        "properties": {"foo": "bar1"},
+        "geometry": { "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+        ]}
+      }],
+      "bbox": [10, 10, 41, 40]
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "id": "id1",
+        "properties": {"foo": "bar1"},
+        "geometry": { "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+        ]}
+      }],
+      "bbox": [10, 10, 41, 40]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('not equal features with equal bboxes', function() {
+    var f1 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "id": "id1",
+        "properties": {"foo": "bar1"},
+        "geometry": { "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+        ]}
+      }],
+      "bbox": [10, 10, 41, 40]
+    };
+    var f2 = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "id": "id1",
+        "properties": {"foo": "bar1"},
+        "geometry": { "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 1]]
+        ]}
+      }],
+      "bbox": [10, 10, 41, 40]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+});
+
 describe('geojson-equality for MultiPoints', function() {
   var g1 = { "type": "MultiPoint", "coordinates": [
     [0, 40], [40, 30], [20, 20], [30, 10]
