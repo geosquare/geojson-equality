@@ -362,3 +362,126 @@ describe('geojson-equality for MultiPolygon', function() {
   });
 });
 
+describe ('geojson-equality for GeometryCollection', function() {
+  it ('will not be equal with different number of geometries', function() {
+    var f1 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Point", "coordinates": [0, 0] }]
+    };
+    var f2 = {
+      "type": "GeometryCollection",
+      "geometries": [
+        { "type": "Point", "coordinates": [0, 0] },
+        { "type": "Point", "coordinates": [0, 0] }
+      ]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will not be equal with different geometries', function() {
+    var f1 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Point", "coordinates": [0, 0] }]
+    };
+    var f2 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Point", "coordinates": [1, 1] }]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will not be equal with different order of geometries', function() {
+    var f1 = {
+      "type": "GeometryCollection",
+      "geometries": [
+        { "type": "Point", "coordinates": [0, 0] },
+        { "type": "Point", "coordinates": [1, 1] }
+      ]
+    };
+    var f2 = {
+      "type": "GeometryCollection",
+      "geometries": [
+        { "type": "Point", "coordinates": [1, 1] },
+        { "type": "Point", "coordinates": [0, 0] }
+      ]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will be equal with equal geometries', function() {
+    var f1 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Point", "coordinates": [0, 0] }]
+    };
+    var f2 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Point", "coordinates": [0, 0] }]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('will be equal with equal with no geometries', function() {
+    var f1 = {
+      "type": "GeometryCollection",
+      "geometries": []
+    };
+    var f2 = {
+      "type": "GeometryCollection",
+      "geometries": []
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('will not be equal if one has bbox and other not', function() {
+    var f1 = {"type": "GeometryCollection", "geometries": [], "bbox": [1, 2, 3, 4]},
+      f2 = {"type": "GeometryCollection", "geometries": "[]"},
+      eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('will not be equal if bboxes are not equal', function() {
+    var f1 = {"type": "GeometryCollection", "geometries": [], "bbox": [1, 2, 3, 4]},
+      f2 = {"type": "GeometryCollection", "geometries": [], "bbox": [1, 2, 3, 5]},
+      eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+  it ('equal geometry collections with bboxes', function() {
+    var f1 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+        ]}
+      ],
+      "bbox": [10, 10, 41, 40]
+    };
+    var f2 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+        ]}
+      ],
+      "bbox": [10, 10, 41, 40]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.true;
+  });
+  it ('not equal geometries with equal bboxes', function() {
+    var f1 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 10]]
+        ]}
+      ],
+      "bbox": [10, 10, 41, 40]
+    };
+    var f2 = {
+      "type": "GeometryCollection",
+      "geometries": [{ "type": "Polygon", "coordinates": [
+          [[30, 10], [41, 40], [20, 40], [10, 20], [30, 1]]
+        ]}
+      ],
+      "bbox": [10, 10, 41, 40]
+    };
+    var eq = new Equality();
+    expect(eq.compare(f1, f2)).to.be.false;
+  });
+});

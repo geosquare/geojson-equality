@@ -21,6 +21,8 @@ Equality.prototype.compare = function(g1,g2) {
   case 'Polygon':
     return this.comparePolygon(g1,g2);
     break;
+  case 'GeometryCollection':
+    return this.compareGeometryCollection(g1, g2);
   case 'Feature':
     return this.compareFeature(g1, g2);
   default:
@@ -124,6 +126,21 @@ Equality.prototype.comparePolygon = function(g1,g2) {
   } else {
     return false;
   }
+};
+
+Equality.prototype.compareGeometryCollection= function(g1,g2) {
+  if (
+    !sameLength(g1.geometries, g2.geometries) ||
+    !this.compareBBox(g1,g2)
+  ) {
+    return false;
+  }
+  for (var i=0; i < g1.geometries.length; i++) {
+    if (!this.compare(g1.geometries[i], g2.geometries[i])) {
+      return false;
+    }
+  }
+  return true
 };
 
 Equality.prototype.compareFeature = function(g1,g2) {
