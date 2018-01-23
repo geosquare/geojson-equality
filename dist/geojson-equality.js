@@ -22,8 +22,12 @@ Equality.prototype.compare = function(g1,g2) {
   case 'Polygon':
     return this.comparePolygon(g1,g2);
     break;
+  case 'GeometryCollection':
+    return this.compareGeometryCollection(g1, g2);
   case 'Feature':
     return this.compareFeature(g1, g2);
+  case 'FeatureCollection':
+    return this.compareFeatureCollection(g1, g2);
   default:
     if (g1.type.indexOf('Multi') === 0) {
       var context = this;
@@ -127,6 +131,21 @@ Equality.prototype.comparePolygon = function(g1,g2) {
   }
 };
 
+Equality.prototype.compareGeometryCollection= function(g1,g2) {
+  if (
+    !sameLength(g1.geometries, g2.geometries) ||
+    !this.compareBBox(g1,g2)
+  ) {
+    return false;
+  }
+  for (var i=0; i < g1.geometries.length; i++) {
+    if (!this.compare(g1.geometries[i], g2.geometries[i])) {
+      return false;
+    }
+  }
+  return true
+};
+
 Equality.prototype.compareFeature = function(g1,g2) {
   if (
     g1.id !== g2.id ||
@@ -136,6 +155,21 @@ Equality.prototype.compareFeature = function(g1,g2) {
     return false;
   }
   return this.compare(g1.geometry, g2.geometry);
+};
+
+Equality.prototype.compareFeatureCollection = function(g1,g2) {
+  if (
+    !sameLength(g1.features, g2.features) ||
+    !this.compareBBox(g1,g2)
+  ) {
+    return false;
+  }
+  for (var i=0; i < g1.features.length; i++) {
+    if (!this.compare(g1.features[i], g2.features[i])) {
+      return false;
+    }
+  }
+  return true
 };
 
 Equality.prototype.compareBBox = function(g1,g2) {
@@ -177,7 +211,7 @@ var deepEqual = module.exports = function (actual, expected, opts) {
 
   // 7.3. Other pairs that do not both pass typeof value == 'object',
   // equivalence is determined by ==.
-  } else if (typeof actual != 'object' && typeof expected != 'object') {
+  } else if (!actual || !expected || typeof actual != 'object' && typeof expected != 'object') {
     return opts.strict ? actual === expected : actual == expected;
 
   // 7.4. For all other Object pairs, including Array objects, equivalence is
