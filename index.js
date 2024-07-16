@@ -1,5 +1,5 @@
 //index.js
-var deepEqual = require('deep-equal');
+var deepEqual = require('dequal');
 
 var Equality = function(opt) {
   this.precision = opt && opt.precision ? opt.precision : 17;
