@@ -33,11 +33,11 @@
     "dequal": "^2.0.3"
   },
   "devDependencies": {
-    "browserify": "~5.10.1",
+    "browserify": "~17.0.0",
     "chai": "~1.9.1",
     "exorcist": "^0.4.0",
     "mocha": "~1.21.4",
     "uglify-js": "^2.6.0",
-    "watchify": "~1.0.2"
+    "watchify": "~4.0.0"
   }
 }
