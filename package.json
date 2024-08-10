@@ -1,6 +1,6 @@
 {
   "name": "geojson-equality",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Check two valid geojson geometries for equality.",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,8 @@
   ],
   "author": "Gagan Bansal <gaganbansal123@gmail.com>",
   "contributors": [
-    "Tim Oram <mitmaro@gmail.com>"
+    "Tim Oram <mitmaro@gmail.com>",
+    "Wojciech Maj < kontakt@wojtekmaj.pl"
   ],
   "license": "MIT",
   "dependencies": {
